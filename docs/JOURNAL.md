@@ -57,7 +57,7 @@ window.
 ## Week 8 — Reproduction & solution planning
 
 **Reproduction commit link:** 
-https://github.com/deathtaco1408/pathreview/commit/9a10094793cb7efd23544f56dc346384aeeddd09
+https://github.com/deathtaco1408/pathreview/commit/9a10094
 
 **Reproduction summary:**
 Ran `PIIScrubber().scrub()` and `.detect()` against `(555) 123-4567` and
@@ -66,7 +66,7 @@ while the dashed format redacted correctly — confirming the bug was in the
 regex's boundary handling, not the surrounding scrub/detect logic.
 
 **PLAN.md link:**
-https://github.com/deathtaco1408/pathreview/commit/07ddb06ecc648c1bda22ea1e5825bc8984d199dc
+https://github.com/deathtaco1408/pathreview/commit/07ddb06
 
 **Walkthrough video (recommended):** 
 
