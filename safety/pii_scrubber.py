@@ -13,6 +13,11 @@ class PIIScrubber:
     # Regex patterns for common PII
     PII_PATTERNS = {
         "email": r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b",
+        # Reproduction (issue #146): prior to this fix, the leading \b boundary
+        # failed on inputs like "(555) 123-4567" because "(" is a non-word char,
+        # so no word-boundary transition existed before it. Observed:
+        #   scrub('Call me at (555) 123-4567')  -> unchanged, not redacted
+        #   detect('Call me at (555) 123-4567') -> []
         "phone_us": r"(?:\+?1[-.\s]?)?\(?\b([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b",
         "phone_intl": r"\+[0-9]{1,3}[-.]?[0-9]{1,14}",
         "ssn": r"\b(?!000|666)[0-9]{3}-(?!00)[0-9]{2}-(?!0000)[0-9]{4}\b",
