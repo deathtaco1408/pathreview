@@ -53,3 +53,24 @@ window.
 **Setup confirmation:** [x] App runs locally at localhost:5173
 
 **Cohort ledger:** [x] Issue added to cohort ledger
+
+## Week 8 — Reproduction & solution planning
+
+**Reproduction commit link:** 
+https://github.com/deathtaco1408/pathreview/commit/9a10094793cb7efd23544f56dc346384aeeddd09
+
+**Reproduction summary:**
+Ran `PIIScrubber().scrub()` and `.detect()` against `(555) 123-4567` and
+confirmed the parenthesized format passed through unredacted and undetected,
+while the dashed format redacted correctly — confirming the bug was in the
+regex's boundary handling, not the surrounding scrub/detect logic.
+
+**PLAN.md link:**
+https://github.com/deathtaco1408/pathreview/commit/07ddb06ecc648c1bda22ea1e5825bc8984d199dc
+
+**Walkthrough video (recommended):** 
+
+**Blockers or open questions:**
+None currently — the `street_address` false-positive bug found during
+testing is unrelated to this issue and out of scope; may raise it as a
+separate issue.
