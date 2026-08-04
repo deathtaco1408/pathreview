@@ -74,3 +74,43 @@ https://github.com/deathtaco1408/pathreview/commit/07ddb06
 None currently — the `street_address` false-positive bug found during
 testing is unrelated to this issue and out of scope; may raise it as a
 separate issue.
+
+### Check-in 1 (mid-week)
+
+**Current progress:**
+Implemented the full fix from PLAN.md — updated the `phone_us` regex to
+move the word-boundary check after the optional opening parenthesis and
+widened digit-group separators to accept whitespace. All sub-tasks from
+PLAN.md are complete: the four named tests pass, the full
+`test_pii_scrubber.py` suite passes except the pre-existing unrelated
+`street_address` bug, and the file is clean under ruff/black/mypy.
+
+**Next steps:**
+Run `make check` and `make test-unit` at the full-project level to confirm
+no pre-existing failures elsewhere are affected, open a draft PR, and get
+peer/mentor feedback in Slack before marking it ready for review.
+
+**Blockers:**
+None currently.
+
+### Check-in 2 (end of week)
+
+**PR link:** (https://github.com/ascherj/pathreview/pull/822)
+
+**Branch:** fix/146-pii-phone-regex
+
+**What you built:**
+Fixed the PII scrubber's phone-number regex so it correctly redacts and
+detects parenthesized and whitespace-separated US phone formats, which
+previously passed through unredacted.
+
+**Tests added or updated:**
+No new test file changes — the existing tests in
+`tests/unit/test_pii_scrubber.py` (`test_us_phone_number_redaction`,
+`test_us_phone_formats`, `test_detect_phone_pii`,
+`test_phone_at_start_of_text`) already covered the expected behavior and
+now pass against the fixed regex.
+
+**Self-review confirmation:** [x] make check passes  [x] make test-unit passes
+
+**Draft PR feedback received from:** [fill in after Slack review]
