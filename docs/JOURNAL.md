@@ -114,3 +114,84 @@ now pass against the fixed regex.
 **Self-review confirmation:** [x] make check passes  [x] make test-unit passes
 
 **Draft PR feedback received from:** [fill in after Slack review]
+
+## Week 10 — Iteration & reflection
+
+### Reviewer feedback
+
+**Feedback received:** [ ] Yes  [x] No — still awaiting review
+
+**Summary of feedback:**
+No reviewer/maintainer feedback has come in on the PR as of this writing.
+(Note: per the Su26 course note, reviewer feedback isn't an active feature
+this term.) I did receive feedback from an outside reviewer, but on
+unrelated files (`review_service.py`, `error_handling.py`) that I never
+touched in this PR — I followed up to clarify whether it was meant for a
+different submission before acting on it, rather than making unrequested
+changes to files outside my PR's scope.
+
+**How you responded:**
+Asked for clarification on the scope mismatch rather than assuming the
+feedback applied to my change. No code changes made yet, pending that
+clarification.
+
+---
+
+### Reflection
+
+**What was harder than you expected?**
+Getting the local environment running took longer than I expected — I hit
+a missing `docker compose up -d` step, then Docker itself wasn't installed,
+then a bcrypt/passlib version warning during seeding. None of these were
+hard individually, but they added up before I'd even looked at the actual
+bug. The regex fix itself was conceptually simple once I found the root
+cause (the `\b` boundary sitting before the optional parenthesis instead of
+after it), but pre-commit hooks (ruff catching a pre-existing long line and
+an unused loop variable, then black reformatting on top of that) meant I
+had to go through several failed-commit cycles before anything actually
+landed. I didn't expect "the fix works" and "the commit succeeds" to be two
+separate hurdles.
+
+**What did you learn about working in a large codebase?**
+The biggest lesson was scope discipline. Running the full test suite
+surfaced 49 failing tests and 178 lint errors across the codebase that had
+nothing to do with my issue. In my own projects I'd be tempted to fix
+everything I see broken; here, the right move was to isolate what was
+pre-existing (verified with `git stash` against `main`) versus what my
+change actually affected, and explicitly document that boundary in the PR
+description instead of quietly expanding scope. I also learned to be
+careful about what actually belongs in a PR — I'd accidentally picked up an
+unrelated root-level `package.json`/`package-lock.json` from a stray `npm
+install docker` and some lockfile drift in `frontend/package-lock.json`,
+and had to consciously strip those out to keep the diff to exactly the
+three files it needed to touch.
+
+**How did AI tools help — and where did they fall short?**
+AI was most useful for the regex root-cause analysis — walking through
+exactly why `\b(?:\+?1[-.]?)?\(?...` failed on `(555) 123-4567` character
+by character was faster with a second set of "eyes" than staring at the
+pattern myself. It was also useful for catching a subtle git-hash typo
+before I put a broken link in JOURNAL.md, and for helping me structure the
+PLAN.md and PR description consistently against the assignment's rubric.
+Where it fell short: it couldn't run my actual environment, so I still had
+to be the one pasting in real terminal output, catching that a file lived
+in `docs/JOURNAL.md` instead of the repo root, and independently verifying
+that the extra `package.json` diff wasn't something to keep. AI is good at
+reasoning about code I show it, but it can't replace actually running
+`make test-unit` myself and reading the output critically.
+
+**What would you do differently if you started over?**
+I'd claim the issue by directly checking the linked PR #162 status before
+starting, instead of assuming it was safe — the checklist clarified claims
+are non-exclusive, but I'd still want that context up front rather than
+mid-stream. I'd also run `make check` and `make test-unit` once, cold, on
+`main` before touching any code, so I had a clean baseline of pre-existing
+failures documented from minute one instead of reconstructing it via
+`git stash` after the fact.
+
+**What are you most proud of from this module?**
+Recognizing the `street_address` regex bug in `test_mixed_pii_and_text` and
+deliberately choosing *not* to fix it, even though I could see exactly what
+was wrong and how to fix it. Staying inside the Tier-1 scope, documenting
+the out-of-scope bug clearly instead of just patching it, was a harder call
+than the actual code fix.
